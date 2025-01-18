@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35431.28
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Survey.app", "Survey.app\Survey.app.csproj", "{77CD0F83-00F8-405B-BC4F-8C563DF13B16}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SurveyBasket.Api", "..\SurveyBasket.Api\SurveyBasket.Api.csproj", "{5B73668E-05DC-4E9A-B5A5-F161483EC424}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{77CD0F83-00F8-405B-BC4F-8C563DF13B16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77CD0F83-00F8-405B-BC4F-8C563DF13B16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77CD0F83-00F8-405B-BC4F-8C563DF13B16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77CD0F83-00F8-405B-BC4F-8C563DF13B16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B73668E-05DC-4E9A-B5A5-F161483EC424}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B73668E-05DC-4E9A-B5A5-F161483EC424}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B73668E-05DC-4E9A-B5A5-F161483EC424}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B73668E-05DC-4E9A-B5A5-F161483EC424}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {027CAACE-B13A-4C19-892C-F26A8E544D2F}
+	EndGlobalSection
+EndGlobal
