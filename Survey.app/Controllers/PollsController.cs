@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Mapster;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography.X509Certificates;
 
@@ -21,14 +22,16 @@ namespace Survey.app.Controllers
         public IActionResult GetById(int id)
         {
 
-            var poll = _pollService.GetById(id);
+            var poll = _pollService.GetById(id).Adapt< PollResponse>();
 
             return poll is null ? NotFound() : Ok(poll);
         }
         [HttpPost("")]
-        public IActionResult Create(Poll newpoll)
+        public IActionResult Create(PollRequest newpoll)
         {
-            var poll = _pollService.Create(newpoll);
+            var poll = newpoll.Adapt<Poll>();
+
+            _pollService.Create(poll);
             return Ok();
         }
 

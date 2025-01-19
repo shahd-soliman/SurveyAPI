@@ -1,7 +1,9 @@
 
 using Survey.app.Middlewares;
 using Survey.app.Services;
-
+using Mapster;
+using System.Reflection;
+using Survey.app.IndependencyInjection;
 namespace Survey.app
 {
     public class Program
@@ -12,11 +14,8 @@ namespace Survey.app
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
-            builder.Services.AddScoped< IPollService , pollService>();
+            builder.Services.AddDependencies();
+
 
             var app = builder.Build();
 
