@@ -1,5 +1,4 @@
 ﻿using Mapster;
-using Survey.app.Models;
 
 namespace Survey.app.Mapping
 {
@@ -8,12 +7,14 @@ namespace Survey.app.Mapping
         public void Register(TypeAdapterConfig config)
         {
             config.NewConfig<Poll, PollResponse>()
-             .Map(dest => dest.Id, src => src.Id)
-         .Map(dest => dest.Title, src => src.Title);
 
+         .Map(dest => dest.Title, src => src.Title)
+         .Map(dest => dest.Summary, src => src.Summary)
+            .Map(dest => dest.EndAt, src => src.EndAt)
+            .Map(dest => dest.StartAt, src => src.StartAt);
             config.NewConfig<PollRequest, Poll>().
                 Map(dest => dest.Title, src => src.Title)
-                   .Map(dest => dest.Description, src => src.Description);
+                   .Map(dest => dest.Summary, src => src.Summary);
 
 
         }

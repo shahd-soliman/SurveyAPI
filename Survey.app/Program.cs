@@ -14,7 +14,7 @@ namespace Survey.app
 
             // Add services to the container.
 
-            builder.Services.AddDependencies();
+            builder.Services.AddDependencies().AddDataBase(builder.Configuration);
 
 
             var app = builder.Build();

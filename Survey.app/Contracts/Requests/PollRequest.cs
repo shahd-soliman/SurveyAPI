@@ -3,6 +3,9 @@
     public record PollRequest(
 
      string Title,
-     string Description
+     string Summary,
+     DateOnly PublishedAt,
+     DateOnly StartAt,
+     DateOnly EndAt
         );
 }

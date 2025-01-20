@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading;
 
 namespace Survey.app.Controllers
 {
@@ -13,42 +14,48 @@ namespace Survey.app.Controllers
         private readonly IPollService _pollService = pollService;
 
         [HttpGet("")]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var polls = _pollService.GetAll();
+            var polls =await _pollService.GetAllAsync();
             return Ok(polls);
         }
         [HttpGet("{id}")]
-        public IActionResult GetById(int id)
+        public async Task< IActionResult > GetById(int id)
         {
+            var poll = await _pollService.GetByIdAsync(id);
 
-            var poll = _pollService.GetById(id).Adapt< PollResponse>();
+            if (poll is null)
+            {
+                return NotFound();
+            }
 
-            return poll is null ? NotFound() : Ok(poll);
+            var pollResponse = poll.Adapt<PollResponse>();
+
+            return Ok(pollResponse);
         }
         [HttpPost("")]
-        public IActionResult Create(PollRequest newpoll)
+        public async Task< IActionResult> Create(PollRequest newpoll , CancellationToken cancellationToken)
         {
             var poll = newpoll.Adapt<Poll>();
 
-            _pollService.Create(poll);
+            await _pollService.CreateAsync(poll , cancellationToken);
             return Ok();
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, Poll newpoll)
+        public async Task< IActionResult> Update(int id, PollRequest pollRequest , CancellationToken cancellationToken)
         {
-
-            var updatedpoll = _pollService.Update(id, newpoll);
+            var newpoll = pollRequest.Adapt<Poll>();
+            var updatedpoll = await _pollService.UpdateAsync(id, newpoll , cancellationToken);
             if (!updatedpoll)
                 return NotFound();
             return NoContent();
         }
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task< IActionResult> Delete(int id , CancellationToken cancellationToken)
         {
 
-           var deleted= _pollService.Delete(id);
+           var deleted=await _pollService.DeleteAsync(id , cancellationToken);
             return deleted ? Ok() : NotFound();
         }
     }

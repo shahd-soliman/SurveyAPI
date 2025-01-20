@@ -1,12 +1,14 @@
 ﻿using FluentValidation;
 using Mapster;
+using Microsoft.EntityFrameworkCore;
+using Survey.app.Data;
 using System.Reflection;
 
 namespace Survey.app.IndependencyInjection
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddDependencies(this IServiceCollection services)
+        public static IServiceCollection AddDependencies(this IServiceCollection services )
         {
             services.AddMappingServices()
                     .AddValidationServices()
@@ -30,7 +32,6 @@ namespace Survey.app.IndependencyInjection
         public static IServiceCollection AddSwaggerServices(this IServiceCollection services)
         {
             services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
             services.AddScoped<IPollService, pollService>();
@@ -38,6 +39,19 @@ namespace Survey.app.IndependencyInjection
             return services;
 
         }
+
+        public static IServiceCollection AddDataBase(this IServiceCollection services, IConfiguration configuration)
+        {
+            var connectionString = configuration.GetConnectionString("Default");
+
+            services.AddDbContext<ApplicationDbContext>(options =>
+            {
+                options.UseSqlServer(connectionString);
+            });
+
+            return services;
+        }
+
     }
 
 
