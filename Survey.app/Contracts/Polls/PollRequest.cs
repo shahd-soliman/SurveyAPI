@@ -1,4 +1,4 @@
-﻿namespace Survey.app.Contracts.Requests
+﻿namespace Survey.app.Contracts.Polls
 {
     public record PollRequest(
 
