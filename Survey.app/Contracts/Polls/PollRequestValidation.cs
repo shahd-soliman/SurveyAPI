@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
 
-namespace Survey.app.Contracts.Validation
+namespace Survey.app.Contracts.Polls
 {
-    public class PollRequestValidation :AbstractValidator<PollRequest>
+    public class PollRequestValidation : AbstractValidator<PollRequest>
     {
         public PollRequestValidation()
         {

@@ -1,4 +1,5 @@
 ﻿using Mapster;
+using Survey.app.Contracts.Polls;
 
 namespace Survey.app.Mapping
 {
