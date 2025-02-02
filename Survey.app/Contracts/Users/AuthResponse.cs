@@ -2,7 +2,7 @@
 {
     public record AuthResponse
     (
-        int id,
+      
         string FirstName,
         string LastName,
         string? Email,
