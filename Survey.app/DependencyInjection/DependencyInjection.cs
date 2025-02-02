@@ -1,8 +1,11 @@
 ﻿using FluentValidation;
 using Mapster;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Survey.app.Data;
 using System.Reflection;
+using System.Text;
 
 namespace Survey.app.IndependencyInjection
 {
@@ -12,7 +15,9 @@ namespace Survey.app.IndependencyInjection
         {
             services.AddMappingServices()
                     .AddValidationServices()
-                    .AddSwaggerServices();
+                    .AddSwaggerServices()
+                    .AddIdentity()
+                    .AddAuthentication();                 
 
             return services;
         }
@@ -35,6 +40,8 @@ namespace Survey.app.IndependencyInjection
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
             services.AddScoped<IPollService, pollService>();
+            services.AddScoped<IAuthService, AuthService>();
+
 
             return services;
 
@@ -47,6 +54,48 @@ namespace Survey.app.IndependencyInjection
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseSqlServer(connectionString);
+            });
+
+            return services;
+        }
+
+        private static IServiceCollection AddIdentity(this IServiceCollection services)
+        {
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                    .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            return services;
+        }
+
+        private static IServiceCollection AddAuthentication(this IServiceCollection services, IConfiguration configuration)
+        {
+
+          //  services.AddSingleton<IJwtProvider, JwtProvider>();
+
+            var jwtSettings = configuration.GetSection( "JWT" );
+            services.AddSingleton(jwtSettings);
+
+            var key = Encoding.ASCII.GetBytes(jwtSettings["Key"]);
+
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = true,
+                    ValidIssuer = jwtSettings["Issuer"],
+                    ValidateAudience = true,
+                    ValidAudience = jwtSettings["Audience"],
+                    ValidateLifetime = true
+                };
             });
 
             return services;
