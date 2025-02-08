@@ -8,7 +8,7 @@ namespace Survey.app.Controllers
     public class AuthController(IAuthService authService) : ControllerBase
     {
         private readonly IAuthService _authService= authService; 
-        [HttpPost]
+        [HttpPost("")]
        public async Task<ActionResult<AuthResponse>> Login([FromBody] AuthRequest request, CancellationToken cancellationToken)
         {
             var result = await _authService.GetTokenAsync( request.Email, cancellationToken  , request.Password);

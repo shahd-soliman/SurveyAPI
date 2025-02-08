@@ -6,7 +6,7 @@ namespace Survey.app.Contracts.Users
     {
         public AuthRequestValidation()
         {
-            RuleFor(x => x.Email).NotEmpty().WithMessage("Email is required");
+            RuleFor(x => x.Email).NotEmpty().EmailAddress().WithMessage("Email is required");
             RuleFor(x => x.Password).NotEmpty().WithMessage("Password is required");
         }
     }

@@ -2,6 +2,7 @@
 using Mapster;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Survey.app.Data;
 using System.Reflection;
@@ -11,13 +12,13 @@ namespace Survey.app.IndependencyInjection
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddDependencies(this IServiceCollection services )
+        public static IServiceCollection AddDependencies(this IServiceCollection services , IConfiguration configuration)
         {
             services.AddMappingServices()
                     .AddValidationServices()
                     .AddSwaggerServices()
                     .AddIdentity()
-                    .AddAuthentication();                 
+                    .AddAuthentication(configuration);                 
 
             return services;
         }
@@ -70,8 +71,10 @@ namespace Survey.app.IndependencyInjection
         private static IServiceCollection AddAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
 
-          //  services.AddSingleton<IJwtProvider, JwtProvider>();
+           
+            services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.SectionName));
 
+            services.AddSingleton<IJwtProvider, JwtProvider>();
             var jwtSettings = configuration.GetSection( "JWT" );
             services.AddSingleton(jwtSettings);
 

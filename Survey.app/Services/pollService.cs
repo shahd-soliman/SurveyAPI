@@ -4,49 +4,53 @@ namespace Survey.app.Services
     public class pollService(ApplicationDbContext context) : IPollService
     {
         private readonly ApplicationDbContext _context = context;
-        public async Task<Poll> CreateAsync(Poll poll, CancellationToken cancellationToken)
+        public async Task<Result<Poll>> CreateAsync(Poll poll, CancellationToken cancellationToken)
         {
             await _context.Polls.AddAsync(poll, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
-            return poll;
+            return Result.Success(poll);
         }
 
 
-        public async Task<List<Poll>> GetAllAsync()
+        public async Task<Result<List<Poll>>> GetAllAsync()
         {
-            return await _context.Polls.AsNoTracking().ToListAsync();
+            var polls = await _context.Polls.AsNoTracking().ToListAsync();
+            return (polls.Any()) ? Result.Success(polls) : Result.Failure<List<Poll>>(PollErrors.NotFound);
         }
 
-        public async Task<Poll> GetByIdAsync(int id)
+        public async Task<Result<Poll>> GetByIdAsync(int id)
         {
             var poll = await _context.Polls.FirstOrDefaultAsync(x => x.Id == id);
-            return poll;
+            return poll is not null ? Result<Poll>.Success(poll) : Result.Failure<Poll>(PollErrors.NotFound);
         }
 
-        public async Task<bool> UpdateAsync(int id, Poll poll, CancellationToken cancellationToken)
+        public async Task<Result> UpdateAsync(int id, Poll poll, CancellationToken cancellationToken)
         {
-            var updatedpoll = await GetByIdAsync(id);
-            if(updatedpoll is null)
-                return false;   
+            var resultpoll = await GetByIdAsync(id);
+            if (resultpoll.IsFailure)
+                return Result.Failure(PollErrors.NotFound);
+            var updatedpoll = resultpoll.GetValueOrThrow();
+
             updatedpoll.Title = poll.Title;
             updatedpoll.Summary = poll.Summary;
             updatedpoll.PublishedAt = poll.PublishedAt;
             updatedpoll.StartAt = poll.StartAt;
             updatedpoll.EndAt = poll.EndAt;
             await _context.SaveChangesAsync(cancellationToken);
-            return true;
+            return Result.Success();
 
         }
-        public async Task< bool> DeleteAsync(int id , CancellationToken cancellationToken)
+        public async Task<Result> DeleteAsync(int id, CancellationToken cancellationToken)
         {
-            var poll = await GetByIdAsync(id );
-            if (poll is null)
-                return false;
-           _context.Polls.Remove(poll );
+            var resultpoll = await GetByIdAsync(id);
+            if (resultpoll.IsFailure)
+                return Result.Failure(PollErrors.NotFound);
+            var poll = resultpoll.GetValueOrThrow();
+            _context.Polls.Remove(poll);
             await _context.SaveChangesAsync(cancellationToken);
-            return true;
+            return Result.Success();
         }
 
-        
+
     }
 }
