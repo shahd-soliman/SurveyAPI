@@ -14,8 +14,8 @@ namespace Survey.app
 
             // Add services to the container.
 
-            builder.Services.AddDependencies().AddDataBase(builder.Configuration);
-
+            builder.Services.AddDependencies(builder.Configuration).AddDataBase(builder.Configuration);
+            //builder.Services.AddIdentityApiEndpoints<ApplicationUser>().AddEntityFrameworkStores<ApplicationDbContext>();
 
             var app = builder.Build();
 
@@ -30,7 +30,7 @@ namespace Survey.app
 
             app.UseAuthorization();
 
-
+           // app.MapIdentityApi<ApplicationUser>();
             app.MapControllers();
 
             app.Run();
