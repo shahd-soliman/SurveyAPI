@@ -37,6 +37,9 @@ namespace Survey.app.IndependencyInjection
         }
         public static IServiceCollection AddSwaggerServices(this IServiceCollection services)
         {
+            services.AddExceptionHandler<GlobalExceptionHandler>();
+            services.AddProblemDetails();
+
             services.AddControllers();
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
