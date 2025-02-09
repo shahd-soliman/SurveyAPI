@@ -13,3 +13,4 @@ global using Microsoft.EntityFrameworkCore;
 global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 global using Survey.app.Abstraction;
 global using Survey.app.Errors;
+global using Microsoft.AspNetCore.Mvc;
